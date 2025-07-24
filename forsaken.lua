@@ -7,7 +7,7 @@ wait(1)
 game:GetService("TextChatService").TextChannels:WaitForChild("RBXGeneral"):SendAsync("кто хочет на ру сервер фарсакен пиши мне в лс Inet_4 или нажми F9 и в конце будет ссылка")
 wait(1)
 
-local text = "\n НАШ \n СЕРВЕР \n ТУТ \n discord.gg/WznZtMrbh8 -- НАШ ЛУЧШИЙ СЕРВЕР"
+local text = "\n                                   НАШ \n                            СЕРВЕР \n                       ТУТ \n                                     discord.gg/WznZtMrbh8 -- НАШ ЛУЧШИЙ СЕРВЕР"
  
 local local_player = game:GetService("Players").LocalPlayer
 local animate = local_player.Character.Animate
