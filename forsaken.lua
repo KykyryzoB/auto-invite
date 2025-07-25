@@ -2,7 +2,7 @@ if not game:IsLoaded() then
     game.Loaded:Wait()
 end
 repeat wait()
-until game.Players.LocalPlayer.Character
+until game:GetService("Players").LocalPlayer.Character
 wait(1)
 game:GetService("TextChatService").TextChannels:WaitForChild("RBXGeneral"):SendAsync("кто хочет на ру сервер фарсакен пиши мне в лс Inet_4 или нажми F9 и в конце будет ссылка")
 wait(1)
@@ -43,7 +43,7 @@ local servers = {}
     end
 
     if #servers > 0 then
-        TeleportService:TeleportToPlaceInstance(PlaceId, servers[math.random(1, #servers)], game.Players.LocalPlayer)
+        TeleportService:TeleportToPlaceInstance(PlaceId, servers[math.random(1, #servers)], game:GetService("Players").LocalPlayer)
     else
         return servhop()
     end
