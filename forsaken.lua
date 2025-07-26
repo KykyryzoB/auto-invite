@@ -36,29 +36,37 @@ end
 task.wait(2)
 
 -- Серверный хоп
+local PlaceId, JobId = game.PlaceId, game.JobId
+local HttpService = game:GetService("HttpService")
+local TeleportService = game:GetService("TeleportService")
+local GuiService = game:GetService("GuiService")
+
 local function servhop()
     local servers = {}
-    local success, response = pcall(function()
-        return game:HttpGet("https://games.roblox.com/v1/games/" .. game.PlaceId .. "/servers/Public?sortOrder=Asc&limit=100")
-    end)
-    
-    if success then
-        local data = game:GetService("HttpService"):JSONDecode(response)
-        for _, v in ipairs(data.data) do
-            if v.playing < v.maxPlayers and v.id ~= game.JobId then
-                table.insert(servers, v.id)
+    local req = game:HttpGet("https://games.roblox.com/v1/games/" .. PlaceId .. "/servers/Public?sortOrder=Desc&limit=100&excludeFullGames=true")
+    local body = HttpService:JSONDecode(req)
+
+    if body and body.data then
+        for i, v in next, body.data do
+            if type(v) == "table" and tonumber(v.playing) and tonumber(v.maxPlayers) and v.playing < v.maxPlayers and v.id ~= JobId then
+                table.insert(servers, 1, v.id)
             end
         end
+    end
+
+    if #servers > 0 then
+        local success, errorMessage = pcall(function()
+            TeleportService:TeleportToPlaceInstance(PlaceId, servers[math.random(1, #servers)], game:GetService("Players").LocalPlayer)
+        end)
         
-        if #servers > 0 then
-            game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId, servers[math.random(1, #servers)])
-        else
-            warn("Не найдено подходящих серверов")
-            return servhop()
+        if not success then
+            GuiService:ClearError()
+            wait(1) -- Небольшая задержка перед повторной попыткой
+            servhop()
         end
     else
-        warn("Ошибка при получении списка серверов:", response)
-        return servhop()
+        wait(1) -- Небольшая задержка перед повторной попыткой
+        servhop()
     end
 end
 
